@@ -15,10 +15,16 @@
     <% @restaurants.each do |restaurant| %>
       <tr>
         <td><%= restaurant.name %></td>
-        <td><%= restaurant.user_id %></td>
-        <td><%= link_to 'Show', restaurant %></td>
-        <td><%= link_to 'Edit', edit_restaurant_path(restaurant) %></td>
-        <td><%= link_to 'Destroy', restaurant, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= restaurant.user.email %></td>
+        <% if policy(restaurant).show? %>
+          <td><%= link_to 'Show', restaurant %></td>
+        <% end %>
+        <% if policy(restaurant).update? %>
+          <td><%= link_to 'Edit', edit_restaurant_path(restaurant) %></td>
+        <% end %>
+        <% if policy(restaurant).destroy? %>
+          <td><%= link_to 'Destroy', restaurant, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
@@ -26,4 +32,6 @@
 
 <br>
 
-<%= link_to 'New Restaurant', new_restaurant_path %>
+<% if policy(Restaurant).create? %>
+  <%= link_to 'New Restaurant', new_restaurant_path %>
+<% end %>
